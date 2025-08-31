@@ -1,11 +1,6 @@
-FROM node:18 AS builder
+FROM python:3.9-slim
 WORKDIR /app
-COPY package*.json ./ 
-RUN npm install
-COPY . .
-RUN npm run build
-FROM node:18-alpine
-WORKDIR /app
-COPY --from=builder /app /app
-EXPOSE 8080
-CMD [ "npm", "start" ]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . . 
+CMD [ "python" "app.py" ]
